@@ -6,20 +6,6 @@
  * date: 2016.07.30
  */
 
-/* @example
-    net.ajax({
-        url: baseUrl + "get_material_info.fcg",
-        param: data,
-        type: 'GET',
-        success: function(data){
-            // alert(data);
-        },
-        error: function(xhr){
-        }
-    });
-
-**/
-
 var xhr = new XMLHttpRequest();
 
 // global config for whole plugin

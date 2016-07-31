@@ -14,7 +14,7 @@ ajax util for development
 	- [Function] error callback
 * ajaxType
 	- [String] ajax type
-	- POST | GET | JSONP
+	- `POST` | `GET` | `JSONP`
 
 
 ## Functions
@@ -82,10 +82,3 @@ net.ajaxJsonp({
     }
 })
 ```
-
-
-## Usage
-/* @example
-    net.ajax();
-
-**/

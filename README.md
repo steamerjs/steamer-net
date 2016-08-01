@@ -18,6 +18,15 @@ ajax util for development
 
 
 ## Functions
+* net.ajaxInit
+```
+net.ajaxInit({
+	dataReturnSuccessCondition: function(data) {
+        return !data.errCode;
+    }
+});
+```
+
 * net.ajax
 ```
 net.ajax({

@@ -1,6 +1,7 @@
 'use strict';
 
 exports.__esModule = true;
+exports.ajaxInit = ajaxInit;
 exports.ajaxGet = ajaxGet;
 exports.ajaxPost = ajaxPost;
 exports.ajaxJsonp = ajaxJsonp;
@@ -8,30 +9,16 @@ exports.ajaxJsonp = ajaxJsonp;
  * steamer-net
  * github: https://github.com/SteamerTeam/steamer-net
  * npm: https://www.npmjs.com/package/steamer-net
- * version: 0.1.0
+ * version: 0.2.0
  * date: 2016.07.30
  */
-
-/* @example
-    net.ajax({
-        url: baseUrl + "get_material_info.fcg",
-        param: data,
-        type: 'GET',
-        success: function(data){
-            // alert(data);
-        },
-        error: function(xhr){
-        }
-    });
-
-**/
 
 var xhr = new XMLHttpRequest();
 
 // global config for whole plugin
 var config = {
-    dataReturnSuccessCondition: function dataReturnSuccessCondition(data) {
-        return !data.errCode;
+    dataReturnSuccessCondition: function dataReturnSuccessCondition() {
+        return true;
     }
 };
 
@@ -79,6 +66,10 @@ function makeParam(paramObj) {
 function makeUrl(url, paramString) {
     url += (!!~url.indexOf('?') ? '&' : '?') + paramString;
     return url;
+}
+
+function ajaxInit(cf) {
+    config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
 }
 
 function ajaxGet(options) {
@@ -189,7 +180,8 @@ var net = {
     ajax: ajax,
     ajaxGet: ajaxGet,
     ajaxPost: ajaxPost,
-    ajaxJsonp: ajaxJsonp
+    ajaxJsonp: ajaxJsonp,
+    ajaxInit: ajaxInit
 };
 
 exports.default = net;

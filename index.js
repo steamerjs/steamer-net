@@ -22,8 +22,6 @@ var config = {
     }
 };
 
-var opts = null;
-
 // readyState const
 var DONE = 4;
 
@@ -35,7 +33,7 @@ function emptyFunc() {};
 
 function makeOpts(options) {
 
-    opts = {};
+    var opts = {};
     opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.method = options.ajaxType || 'GET';
     opts.method = opts.method.toUpperCase();
     return opts;
@@ -111,7 +109,7 @@ function ajaxJsonp(options) {
     delete opts.paramObj['jsonCbName'];
 
     window[opts.paramObj.callback] = function (data) {
-        onDataReturn(data);
+        onDataReturn(data, opts);
         removeScript(script);
     };
 
@@ -136,7 +134,7 @@ function ajaxJsonp(options) {
     };
 }
 
-function onDataReturn(data) {
+function onDataReturn(data, opts) {
     var isSuccess = config.dataReturnSuccessCondition(data);
     isSuccess ? opts.successCb(data) : opts.errorCb(data);
 }
@@ -146,7 +144,7 @@ function ajax(options) {
 
     // 如果本地已经从别的地方获取到数据，就不用请求了
     if (opts.localData) {
-        onDataReturn(opts.localData);
+        onDataReturn(opts.localData, opts);
         return;
     }
 
@@ -154,7 +152,7 @@ function ajax(options) {
         if (xhr.readyState === DONE) {
             if (xhr.status === STATE_200) {
                 var data = JSON.parse(xhr.responseText);
-                onDataReturn(data);
+                onDataReturn(data, opts);
             } else {
                 opts.errorCb({
                     errCode: xhr.status

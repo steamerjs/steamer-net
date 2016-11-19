@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 exports.__esModule = true;
 exports.ajaxInit = ajaxInit;
@@ -9,11 +9,9 @@ exports.ajaxJsonp = ajaxJsonp;
  * steamer-net
  * github: https://github.com/SteamerTeam/steamer-net
  * npm: https://www.npmjs.com/package/steamer-net
- * version: 0.2.0
+ * version: 0.2.2
  * date: 2016.07.30
  */
-
-var xhr = new XMLHttpRequest();
 
 // global config for whole plugin
 var config = {
@@ -37,6 +35,38 @@ function makeOpts(options) {
     opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.method = options.ajaxType || 'GET';
     opts.method = opts.method.toUpperCase();
     return opts;
+}
+
+/**
+ * create xhr
+ * @return {Object} [xhr object]
+ */
+function createXHR() {
+
+    var xhr = null;
+
+    var XMLHttpFactories = [function () {
+        return new XMLHttpRequest();
+    }, function () {
+        return new XDomainRequest();
+    }, function () {
+        return new ActiveXObject("Msxml2.XMLHTTP");
+    }, function () {
+        return new ActiveXObject("Msxml3.xmlhttp");
+    }, function () {
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }];
+
+    for (var i = 0, len = XMLHttpFactories.length; i < len; i++) {
+        try {
+            xhr = XMLHttpFactories[i]();
+        } catch (e) {
+            continue;
+        }
+        break;
+    }
+
+    return xhr;
 }
 
 /**
@@ -70,25 +100,25 @@ function ajaxInit(cf) {
     config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
 }
 
-function ajaxGet(options) {
+function ajaxGet(xhr, options) {
     var opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
         url = makeUrl(opts.url, opts.paramString);
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader && xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send();
 }
 
-function ajaxPost(options) {
+function ajaxPost(xhr, options) {
     var opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
         url = opts.url;
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader && xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(paramString);
 }
 
@@ -140,6 +170,9 @@ function onDataReturn(data, opts) {
 }
 
 function ajax(options) {
+
+    var xhr = createXHR();
+
     var opts = makeOpts(options);
 
     // 如果本地已经从别的地方获取到数据，就不用请求了
@@ -161,15 +194,26 @@ function ajax(options) {
         }
     };
 
+    xhr.onload = function () {
+        var data = JSON.parse(xhr.responseText);
+        onDataReturn(data, opts);
+    };
+
+    xhr.onerror = function () {
+        opts.errorCb({
+            errCode: -1
+        });
+    };
+
     switch (opts.method) {
         case 'JSONP':
             ajaxJsonp(options);
             break;
         case 'GET':
-            ajaxGet(options);
+            ajaxGet(xhr, options);
             break;
         case 'POST':
-            ajaxPost(options);
+            ajaxPost(xhr, options);
             break;
     }
 }

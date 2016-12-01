@@ -195,8 +195,10 @@ function ajax(options) {
     };
 
     xhr.onload = function () {
-        var data = JSON.parse(xhr.responseText);
-        onDataReturn(data, opts);
+        if (xhr.status === STATE_200) {
+            var data = JSON.parse(xhr.responseText);
+            onDataReturn(data, opts);
+        }
     };
 
     xhr.onerror = function () {

@@ -184,7 +184,7 @@ function ajax(options) {
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === DONE) {
-            if(xhr.status === STATE_200) {
+            if (xhr.status === STATE_200) {
                 let data = JSON.parse(xhr.responseText);
                 onDataReturn(data, opts);
             }
@@ -196,9 +196,11 @@ function ajax(options) {
         }
     };
 
-    xhr.onload = function() {      
-        let data = JSON.parse(xhr.responseText);
-        onDataReturn(data, opts);
+    xhr.onload = function() {    
+        if (xhr.status === STATE_200) {
+            let data = JSON.parse(xhr.responseText);
+            onDataReturn(data, opts);
+        }
     };
 
     xhr.onerror = function() {

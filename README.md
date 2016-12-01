@@ -91,3 +91,6 @@ net.ajaxJsonp({
     }
 })
 ```
+
+### Changelog
+* v0.2.4 basic ajax features

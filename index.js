@@ -194,13 +194,6 @@ function ajax(options) {
         }
     };
 
-    xhr.onload = function () {
-        if (xhr.status === STATE_200) {
-            var data = JSON.parse(xhr.responseText);
-            onDataReturn(data, opts);
-        }
-    };
-
     xhr.onerror = function () {
         opts.errorCb({
             errCode: -1

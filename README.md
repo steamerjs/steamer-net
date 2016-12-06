@@ -94,3 +94,4 @@ net.ajaxJsonp({
 
 ### Changelog
 * v0.2.4 basic ajax features
+* v0.2.5 remove xhr.onload

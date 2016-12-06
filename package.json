@@ -1,6 +1,6 @@
 {
   "name": "steamer-net",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "ajax util",
   "main": "index.js",
   "files": [

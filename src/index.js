@@ -103,7 +103,7 @@ export function ajaxInit(cf) {
 export function ajaxGet(xhr, options) {
     let opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
-        url = makeUrl(opts.url, opts.paramString);
+        url = makeUrl(opts.url, paramString);
 
 
     xhr.open(opts.method, url, true);

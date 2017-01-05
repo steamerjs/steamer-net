@@ -103,7 +103,7 @@ function ajaxInit(cf) {
 function ajaxGet(xhr, options) {
     var opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
-        url = makeUrl(opts.url, opts.paramString);
+        url = makeUrl(opts.url, paramString);
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;

@@ -176,6 +176,10 @@ describe("ajax ajaxType", function() {
 	        {
 	            "id": 2,
 	            "name": "b"
+	        },
+	        {
+	            "id": 3,
+	            "name": "c"
 	        }
 	    ]
 	};
@@ -189,7 +193,7 @@ describe("ajax ajaxType", function() {
   		var doneFn = jasmine.createSpy("success");
 
   		net.ajax({
-		    url: "./response/1.json",
+		    url: "./response/5.json",
 		    param: {
 		    	id: 1
 		    },
@@ -238,7 +242,7 @@ describe("ajax ajaxType", function() {
   		var doneFn = jasmine.createSpy("success");
 
   		net.ajax({
-		    url: "./response/1.json",
+		    url: "./response/5.json",
 		    param: {
 		    	id: 1
 		    },
@@ -287,7 +291,7 @@ describe("ajax ajaxType", function() {
   		var doneFn = jasmine.createSpy("success");
 
   		net.ajax({
-		    url: "./response/2.json",
+		    url: "./response/6.json",
 		    param: {
 		    	id: 1,
 		    	jsonCbName: "ajaxJson"

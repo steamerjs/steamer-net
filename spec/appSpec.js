@@ -41,6 +41,28 @@ describe("ajax direct functions", function() {
     	
   	});
 
+  	it("test get request local data", function(done) {
+      		
+  		var doneFn = jasmine.createSpy("success");
+
+  		net.ajaxGet({
+		    url: "./response/1.json",
+		    param: {
+		    	from: "localdata"
+		    },
+		    localData: result.data,
+		    success: function(data) {
+		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result.data));
+		    	done();
+		    },
+		    error: function(xhr) {
+		    	done();
+		    	console.log(xhr);
+		    }
+		});
+    	
+  	});
+
   	it("test get request error", function(done) {
       		
   		var doneFn = jasmine.createSpy("success");
@@ -78,6 +100,28 @@ describe("ajax direct functions", function() {
 		    },
 		    success: function(data) {
 		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result));
+		    	done();
+		    },
+		    error: function(xhr) {
+		    	done();
+		    	console.log(xhr);
+		    }
+		});
+    	
+  	});
+
+  	it("test post request local data", function(done) {
+      		
+  		var doneFn = jasmine.createSpy("success");
+
+  		net.ajaxPost({
+		    url: "./response/1.json",
+		    param: {
+		    	from: "localdata"
+		    },
+		    localData: result.data,
+		    success: function(data) {
+		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result.data));
 		    	done();
 		    },
 		    error: function(xhr) {
@@ -157,6 +201,30 @@ describe("ajax direct functions", function() {
 		    error: function(data) {
 		    	expect(JSON.stringify(data)).toBe(JSON.stringify(errorResult));
 		    	done();
+		    }
+		});
+    	
+  	});
+
+  	it("test jsonp request local data", function(done) {
+      		
+  		var doneFn = jasmine.createSpy("success");
+
+  		net.ajaxJsonp({
+		    url: "./response/2.json",
+		    param: {
+		    	// from: "localdata",
+		    	jsonCbName: "ajaxJson"
+		    },
+		    localData: result.data,
+		    success: function(data) {
+		    	console.log(data);
+		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result.data));
+		    	done();
+		    },
+		    error: function(xhr) {
+		    	done();
+		    	console.log(xhr);
 		    }
 		});
     	

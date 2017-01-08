@@ -29,6 +29,7 @@ function makeOpts(options) {
     opts.paramObj = options.param || {},
     opts.successCb = options.success || emptyFunc,
     opts.errorCb = options.error || emptyFunc,
+    opts.localData = options.localData || null,
     opts.method = options.ajaxType || 'GET';
     opts.method = opts.method.toUpperCase();
     return opts;
@@ -142,6 +143,11 @@ export function ajaxJsonp(options) {
     delete opts.paramObj['jsonCbName'];
 
     window[opts.paramObj.callback] = function(data) {
+        if (opts.localData) {
+            onDataReturn(opts.localData, opts);
+            return;
+        }
+
         onDataReturn(data, opts);
         removeScript(script);
     };
@@ -176,7 +182,7 @@ function sendReq(opts) {
     var xhr = createXHR();
 
     // 如果本地已经从别的地方获取到数据，就不用请求了
-    if(opts.localData) {
+    if (opts.localData) {
         onDataReturn(opts.localData, opts);
         return;
     }

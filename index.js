@@ -32,7 +32,7 @@ function emptyFunc() {}
 function makeOpts(options) {
 
     var opts = {};
-    opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.method = options.ajaxType || 'GET';
+    opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.localData = options.localData || null, opts.method = options.ajaxType || 'GET';
     opts.method = opts.method.toUpperCase();
     return opts;
 }
@@ -142,6 +142,11 @@ function ajaxJsonp(options) {
     delete opts.paramObj['jsonCbName'];
 
     window[opts.paramObj.callback] = function (data) {
+        if (opts.localData) {
+            onDataReturn(opts.localData, opts);
+            return;
+        }
+
         onDataReturn(data, opts);
         removeScript(script);
     };

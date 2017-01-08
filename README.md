@@ -92,6 +92,26 @@ net.ajaxJsonp({
 })
 ```
 
+## Local data
+If you would like to use local data, you can specify `localData` param.
+
+```
+net.ajaxPost({
+    url: baseUrl + "get_material_info.fcg",
+    param: {
+        id: 1
+    },
+    localData: [{id: 1, name: "a"}],
+    success: function(data){
+        // some code
+    },
+    error: function(xhr){
+        // some code
+    }
+})
+```
+
+
 ### Test
 `index.html` is the test file. Use `fiddler` or `charles` to set up a proxy for tesing in order to skip cross origin issues:
 

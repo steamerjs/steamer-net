@@ -20,7 +20,7 @@ const DONE = 4;
 const STATE_200 = 200;
 
 // empty function
-function emptyFunc() {};
+function emptyFunc() {}
 
 function makeOpts(options) {
 
@@ -74,8 +74,7 @@ function createXHR() {
  * @return {String}          [return param string]
  */
 function makeParam(paramObj) {
-    let paramArray = [], 
-        paramString = '';
+    let paramArray = [];
 
     for(let key in paramObj){
         paramArray.push(key + '=' + encodeURIComponent(paramObj[key]));
@@ -100,11 +99,12 @@ export function ajaxInit(cf) {
     config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
 }
 
-export function ajaxGet(xhr, options) {
+export function ajaxGet(options) {
     let opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
         url = makeUrl(opts.url, paramString);
 
+    var xhr = sendReq(opts);
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;
@@ -112,10 +112,12 @@ export function ajaxGet(xhr, options) {
     xhr.send();
 }
 
-export function ajaxPost(xhr, options) {
+export function ajaxPost(options) {
     let opts = makeOpts(options),
         paramString = makeParam(opts.paramObj),
         url = opts.url;
+
+    var xhr = sendReq(opts);
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;
@@ -170,11 +172,8 @@ function onDataReturn(data, opts) {
     isSuccess ? opts.successCb(data) : opts.errorCb(data);
 }
 
-function ajax(options) {
-
+function sendReq(opts) {
     var xhr = createXHR();
-
-    var opts = makeOpts(options);
 
     // 如果本地已经从别的地方获取到数据，就不用请求了
     if(opts.localData) {
@@ -202,15 +201,22 @@ function ajax(options) {
         });
     };
 
+    return xhr;
+}
+
+function ajax(options) {
+
+    let opts = makeOpts(options);
+
     switch(opts.method) {
         case 'JSONP':
             ajaxJsonp(options);
             break;
         case 'GET':
-            ajaxGet(xhr, options);
+            ajaxGet(options);
             break;
         case 'POST':
-            ajaxPost(xhr, options);
+            ajaxPost(options);
             break;
     }
 

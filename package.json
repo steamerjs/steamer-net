@@ -4,7 +4,7 @@
   "description": "ajax util",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": "./config/eslint-config.js"

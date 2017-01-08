@@ -1,11 +1,17 @@
 {
   "name": "steamer-net",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ajax util",
   "main": "index.js",
   "scripts": {
     "lint": "eslint src"
   },
+  "files": [
+    "es6.js",
+    "index.js",
+    "src",
+    "gulpfile.js"
+  ],
   "eslintConfig": {
     "extends": "./config/eslint-config.js"
   },

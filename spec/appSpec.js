@@ -53,7 +53,21 @@ describe("ajax direct functions", function() {
 		    localData: result.data,
 		    success: function(data) {
 		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result.data));
-		    	done();
+
+		    	net.ajaxGet({
+				    url: "./response/1.json",
+				    param: {
+				    	from: "localdata"
+				    },
+				    success: function(data) {
+				    	done();
+				    },
+				    error: function(xhr) {
+				    	done();
+				    	console.log(xhr);
+				    }
+				});
+
 		    },
 		    error: function(xhr) {
 		    	done();
@@ -122,7 +136,20 @@ describe("ajax direct functions", function() {
 		    localData: result.data,
 		    success: function(data) {
 		    	expect(JSON.stringify(data)).toBe(JSON.stringify(result.data));
-		    	done();
+		    	
+		    	net.ajaxPost({
+				    url: "./response/1.json",
+				    param: {
+				    	from: "localdata"
+				    },
+				    success: function(data) {
+				    	done();
+				    },
+				    error: function(xhr) {
+				    	done();
+				    	console.log(xhr);
+				    }
+				});
 		    },
 		    error: function(xhr) {
 		    	done();
@@ -196,7 +223,19 @@ describe("ajax direct functions", function() {
 		    	jsonCbName: "ajaxJson"
 		    },
 		    success: function(data) {
-		    	done();
+		    	net.ajaxJsonp({
+				    url: "./response/1.json",
+				    param: {
+				    	from: "localdata"
+				    },
+				    success: function(data) {
+				    	done();
+				    },
+				    error: function(xhr) {
+				    	done();
+				    	console.log(xhr);
+				    }
+				});
 		    },
 		    error: function(data) {
 		    	expect(JSON.stringify(data)).toBe(JSON.stringify(errorResult));

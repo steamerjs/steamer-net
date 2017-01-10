@@ -107,6 +107,10 @@ export function ajaxGet(options) {
 
     var xhr = sendReq(opts);
 
+    if (!xhr) {
+        return;  
+    } 
+
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;
     xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
@@ -119,6 +123,10 @@ export function ajaxPost(options) {
         url = opts.url;
 
     var xhr = sendReq(opts);
+
+    if (!xhr) {
+        return;  
+    } 
 
     xhr.open(opts.method, url, true);
     xhr.withCredentials = true;

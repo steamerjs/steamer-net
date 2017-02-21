@@ -127,3 +127,4 @@ http://localhost:8081/index.js /project/index.js
 * v0.2.6 fix ajax get bug
 * v1.0.0 add tests
 * v1.1.1 fix xhr bug if you pass data to `localData`
+* v1.1.2 compatible with `global`

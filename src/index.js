@@ -6,6 +6,15 @@
  * date: 2016.07.30
  */
 
+var global = (typeof global !== "undefined") ? global : {};
+
+if (typeof window !== "undefined") {
+    global = window;
+} 
+else if (typeof self !== "undefined"){
+    global = self;
+}
+
 // global config for whole plugin
 var config = {
     dataReturnSuccessCondition: function() {
@@ -150,7 +159,7 @@ export function ajaxJsonp(options) {
     opts.paramObj.callback = opts.paramObj.jsonCbName;
     delete opts.paramObj['jsonCbName'];
 
-    window[opts.paramObj.callback] = function(data) {
+    global[opts.paramObj.callback] = function(data) {
         if (opts.localData) {
             onDataReturn(opts.localData, opts);
             return;
@@ -169,8 +178,8 @@ export function ajaxJsonp(options) {
 
     let paramString = makeParam(opts.paramObj),
         url = makeUrl(opts.url, paramString),
-        script = document.createElement("script"),
-        head = document.getElementsByTagName("head")[0];
+        script = (global && global.document) ? global.document.createElement("script") : {},
+        head = (global && global.document) ? global.document.getElementsByTagName("head")[0] : {};
     
     script.src = url;
     head.appendChild(script);
@@ -188,6 +197,10 @@ function onDataReturn(data, opts) {
 
 function sendReq(opts) {
     var xhr = createXHR();
+    
+    if (!xhr) {
+        throw new Error('XMLHttp is not defined');
+    }
 
     // 如果本地已经从别的地方获取到数据，就不用请求了
     if (opts.localData) {

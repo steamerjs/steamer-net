@@ -120,7 +120,7 @@ export function ajaxGet(options) {
         return;  
     } 
 
-    xhr.open(opts.method, url, true);
+    xhr.open('GET', url, true);
     xhr.withCredentials = true;
     xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xhr.send();
@@ -137,7 +137,7 @@ export function ajaxPost(options) {
         return;  
     } 
 
-    xhr.open(opts.method, url, true);
+    xhr.open('POST', url, true);
     xhr.withCredentials = true;
     xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xhr.send(paramString);
@@ -152,8 +152,12 @@ export function ajaxJsonp(options) {
 
     let opts = makeOpts(options);
 
-    if (!opts.paramObj || !opts.paramObj.jsonCbName) {
-        throw new Error("Please provide a callback function name for jsonp");
+    if (!opts.paramObj) {
+        throw new Error("Please provide parameter for jsonp");
+    }
+
+    if (!opts.paramObj.jsonCbName) {
+        opts.paramObj.jsonCbName = "jsonCb_" + Date.now();
     }
 
     opts.paramObj.callback = opts.paramObj.jsonCbName;

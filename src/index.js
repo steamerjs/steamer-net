@@ -34,13 +34,15 @@ function emptyFunc() {}
 function makeOpts(options) {
 
     let opts = {};
-    opts.url = options.url,
-    opts.paramObj = options.param || {},
-    opts.successCb = options.success || emptyFunc,
-    opts.errorCb = options.error || emptyFunc,
-    opts.localData = options.localData || null,
-    opts.method = options.ajaxType || 'GET';
-    opts.method = opts.method.toUpperCase();
+        opts.url = options.url,
+        opts.paramObj = options.param || {},
+        opts.successCb = options.success || emptyFunc,
+        opts.errorCb = options.error || emptyFunc,
+        opts.localData = options.localData || null,
+        opts.xhrFields = options.xhrFields || {},
+        opts.headers = options.headers || {};
+        opts.method = options.ajaxType || 'GET';
+        opts.method = opts.method.toUpperCase();
     return opts;
 }
 
@@ -104,6 +106,32 @@ function makeUrl(url, paramString) {
     return url;
 }
 
+/**
+ * set request headers
+ * @param {Object} xhr 
+ * @param {Object} headers 
+ */
+function makeHeaders(xhr, headers, method) {
+
+    if (!xhr.setRequestHeader) {
+        return;
+    }
+
+    if ((method === 'GET' || method === 'POST')) {
+        xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    }
+
+    let headers = headers || {};
+    for (let key in headers) {
+        if (headeres.hasOwnProperty(key)) {
+            xhr.setRequestHeader(key, headers[key]);
+        }
+    }
+}
+
+function makeXhrFields(xhr, xhrFields) {
+    xhr.withCredentials = xhrFields.withCredentials || true;
+}
 
 export function ajaxInit(cf) {
     config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
@@ -121,8 +149,9 @@ export function ajaxGet(options) {
     } 
 
     xhr.open('GET', url, true);
-    xhr.withCredentials = true;
-    xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    makeXhrFields(xhr, opts.xhrFields);
+    // xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    makeHeaders(xhr, opts.headers, 'GET');
     xhr.send();
 }
 
@@ -138,9 +167,25 @@ export function ajaxPost(options) {
     } 
 
     xhr.open('POST', url, true);
-    xhr.withCredentials = true;
-    xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    makeXhrFields(xhr, opts.xhrFields);
+    // xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+    makeHeaders(xhr, opts.headers, 'POST');
     xhr.send(paramString);
+}
+
+function ajaxForm(options) {
+    var opts = makeOpts(options),
+        url = opts.url;
+
+    var xhr = sendReq(opts);
+
+    if (!xhr) {
+        return;
+    }
+
+    xhr.open('POST', url, true);
+    makeXhrFields(xhr, opts.xhrFields, 'FORM');
+    xhr.send(opts.paramObj);
 }
 
 /**
@@ -248,6 +293,9 @@ function ajax(options) {
             break;
         case 'POST':
             ajaxPost(options);
+            break;
+        case 'FORM':
+            ajaxForm(options);
             break;
     }
 

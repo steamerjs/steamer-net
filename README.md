@@ -14,7 +14,17 @@ ajax util for development
 	- [Function] error callback
 * ajaxType
 	- [String] ajax type
-	- `POST` | `GET` | `JSONP`
+	- `POST` | `GET` | `JSONP` | `FORM`
+* xhrFields
+    - [Object]
+    - {
+        withCredentials: `true` or `false`
+    }
+* headers
+    - [Object] request headers
+    - {
+        'Access-Control-Allow-Origin': '*'
+    }
 
 
 ## Functions

@@ -127,16 +127,6 @@ net.ajaxPost({
 })
 ```
 
-
-### Test
-`index.html` is the test file. Use `fiddler` or `charles` to set up a proxy for tesing in order to skip cross origin issues:
-
-```
-// example
-http://localhost:8081/*  /project/spec
-http://localhost:8081/index.js /project/index.js
-```
-
 ### Changelog
 * v0.2.4 basic ajax features
 * v0.2.5 remove xhr.onload

@@ -12,9 +12,15 @@ ajax util for development
 	- [Function] success callback
 * error
 	- [Function] error callback
+    - errCode: `-1` => `xhr.onerror`, `-2` => `xhr.ontimeout`
 * ajaxType
 	- [String] ajax type
+    - default `GET`
 	- `POST` | `GET` | `JSONP` | `FORM`
+* dataType
+    - [String] returned data type
+    - default `json`
+    - `json` | `text` |
 * xhrFields
     - [Object]
     - {
@@ -138,3 +144,4 @@ http://localhost:8081/index.js /project/index.js
 * v1.0.0 add tests
 * v1.1.1 fix xhr bug if you pass data to `localData`
 * v1.1.2 compatible with `global`
+* v1.1.4 add `headers`, `xhrFields` fields and support `FORM` type

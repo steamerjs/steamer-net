@@ -1,6 +1,6 @@
 {
   "name": "steamer-net",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "ajax util",
   "main": "./dist/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "lint": "eslint src/**/*.js && stylelint src/**/*.less",
     "lint:js": "eslint src/**/*.js",
     "lint:style": "stylelint src/**/*.less",
-    "prepublish": "npm run dist"
+    "prepublish": "npm run dist && cp ./dist/index.js ./index.js"
   },
   "repository": {
     "type": "git",

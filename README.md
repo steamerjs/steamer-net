@@ -37,11 +37,20 @@ ajax util for development
 * net.ajaxInit
 ```
 net.ajaxInit({
-	dataReturnSuccessCondition: function(data) {
+    beforeRequest: function(opts)　{
+        opts.param.xsrf = 'xsrf';
+        return opts;
+    },
+    beforeResponse: function(data, successCb, errorCb) {
+        data.foo = 'bar';
+        successCb(data);
+    },
+    dataReturnSuccessCondition: function(data) {
         return !data.errCode;
-    }
+    },
 });
 ```
+> `dataReturnSuccessCondition` will invoked after `beforeResponse`
 
 * net.ajax
 ```
@@ -129,12 +138,8 @@ net.ajaxPost({
 
 
 ### Test
-`index.html` is the test file. Use `fiddler` or `charles` to set up a proxy for tesing in order to skip cross origin issues:
-
 ```
-// example
-http://localhost:8081/*  /project/spec
-http://localhost:8081/index.js /project/index.js
+npm run test
 ```
 
 ### Changelog
@@ -145,3 +150,4 @@ http://localhost:8081/index.js /project/index.js
 * v1.1.1 fix xhr bug if you pass data to `localData`
 * v1.1.2 compatible with `global`
 * v1.1.4 add `headers`, `xhrFields` fields and support `FORM` type
+* v1.1.5 add `beforeRequest` and `beforeResponse` hooks

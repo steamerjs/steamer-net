@@ -17,6 +17,12 @@
  let config = {
      dataReturnSuccessCondition: function() {
          return true;
+     },
+     beforeRequest: function(opts) {
+         return opts;
+     },
+     beforeResponse: function(data, successCb, errorCb) {
+         successCb(data);
      }
  };
  
@@ -31,6 +37,7 @@
  
  function makeOpts(options) {
  
+     options = config.beforeRequest(options);
      let opts = {};
          opts.url = options.url,
          opts.paramObj = options.param || {},
@@ -139,7 +146,9 @@
  }
  
  export function ajaxInit(cf) {
-     config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
+    config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
+    config.beforeRequest = cf.beforeRequest || config.beforeRequest;
+    config.beforeResponse = cf.beforeResponse || config.beforeResponse;
  }
  
  export function ajaxGet(options) {
@@ -246,8 +255,10 @@
  }
  
  function onDataReturn(data, opts) {
-     let isSuccess = config.dataReturnSuccessCondition(data);
-     isSuccess ? opts.successCb(data) : opts.errorCb(data);
+     config.beforeResponse(data, function(data) {
+         let isSuccess = config.dataReturnSuccessCondition(data);
+         isSuccess ? opts.successCb(data) : opts.errorCb(data);
+     }, opts.errorCb);
  }
  
  function sendReq(opts) {

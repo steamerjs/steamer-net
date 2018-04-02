@@ -6,14 +6,15 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node ./tools/script.js",
     "dev": "npm run start",
-    "dist": "npm run webpack",
+    "dist": "npm run babel",
     "test": "npm run karma",
     "babel": "babel src --out-dir dist --copy-files",
     "webpack": "cross-env NODE_ENV=production node ./tools/script.js",
     "karma": "cross-env BABEL_ENV=test NODE_ENV=production KARMA_ENV=karma node ./tools/script.js",
     "lint": "eslint src/**/*.js && stylelint src/**/*.less",
     "lint:js": "eslint src/**/*.js",
-    "lint:style": "stylelint src/**/*.less"
+    "lint:style": "stylelint src/**/*.less",
+    "prepublish": "npm run dist && cp ./dist/index.js ./index.js"
   },
   "repository": {
     "type": "git",

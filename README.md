@@ -136,7 +136,6 @@ net.ajaxPost({
 })
 ```
 
-
 ### Test
 ```
 npm run test

@@ -30,7 +30,7 @@ module.exports = function(config) {
             'karma-webpack',
             'karma-sourcemap-loader',
             'karma-spec-reporter',
-            'karma-phantomjs-launcher',
+            // 'karma-phantomjs-launcher',
             'karma-chrome-launcher'
         ],
         // frameworks to use

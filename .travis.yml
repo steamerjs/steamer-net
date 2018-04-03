@@ -21,5 +21,7 @@ before_install:
 
 after_success:
   - cat ./test/unit/coverage/lcov.info | node_modules/.bin/coveralls --verbose
-  - cat ./test/unit/coverage/coverage.json | node_modules/codecov.io/bin/codecov.io.js
+  - cat ./test/unit/coverage/coverage-final.json | node_modules/codecov.io/bin/codecov.io.js
   - rm -rf ./test/unit/coverage
+
+  # [http://www.jackpu.com/jie-jue-travis-ci-zhong-chromezhao-bu-dao-de-ban-fa/](解决travis ci 中chrome找不到的办法)

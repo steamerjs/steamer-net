@@ -1,5 +1,9 @@
 ## steamer-net
 ajax util for development
+[![NPM Version](https://img.shields.io/npm/v/steamer-net.svg?style=flat)](https://www.npmjs.com/package/steamer-net)
+[![Travis](https://img.shields.io/travis/steamerjs/steamer-net.svg)](https://travis-ci.org/steamerjs/steamer-net)
+[![Deps](https://david-dm.org/steamerjs/steamer-net.svg)](https://david-dm.org/steamerjs/steamer-net)
+[![Coverage](https://img.shields.io/coveralls/steamerjs/steamer-net.svg)](https://coveralls.io/github/steamerjs/steamer-net)
 
 
 ## Options

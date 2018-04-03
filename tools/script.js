@@ -2,7 +2,7 @@
 
 const utils = require('steamer-webpack-utils'),
 	  webpack = require('webpack'),
-	  opn = require('opn'),
+	//   opn = require('opn'),
 	  fs = require('fs'),
       path = require('path'),
       karmaServer = require('karma').Server;
@@ -26,7 +26,7 @@ if (isKarma) {
         singleRun: true
     }, function() {
         console.log('karma test done!');
-        opn(path.join(configWebpack.path.test, 'unit/coverage/lcov-report/index.html'));
+        // opn(path.join(configWebpack.path.test, 'unit/coverage/lcov-report/index.html'));
     });
     server.start();
 }

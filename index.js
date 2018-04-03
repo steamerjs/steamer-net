@@ -23,6 +23,12 @@ if (typeof window !== "undefined") {
 var config = {
     dataReturnSuccessCondition: function dataReturnSuccessCondition() {
         return true;
+    },
+    beforeRequest: function beforeRequest(opts) {
+        return opts;
+    },
+    beforeResponse: function beforeResponse(data, successCb, errorCb) {
+        successCb(data);
     }
 };
 
@@ -37,6 +43,7 @@ function emptyFunc() {}
 
 function makeOpts(options) {
 
+    options = config.beforeRequest(options);
     var opts = {};
     opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.localData = options.localData || null, opts.xhrFields = options.xhrFields || {}, opts.headers = options.headers || {};
     opts.method = options.ajaxType || 'GET';
@@ -138,6 +145,8 @@ function makeXhrFields(xhr, xhrFields) {
 
 function ajaxInit(cf) {
     config.dataReturnSuccessCondition = cf.dataReturnSuccessCondition || config.dataReturnSuccessCondition;
+    config.beforeRequest = cf.beforeRequest || config.beforeRequest;
+    config.beforeResponse = cf.beforeResponse || config.beforeResponse;
 }
 
 function ajaxGet(options) {
@@ -244,8 +253,10 @@ function ajaxJsonp(options) {
 }
 
 function onDataReturn(data, opts) {
-    var isSuccess = config.dataReturnSuccessCondition(data);
-    isSuccess ? opts.successCb(data) : opts.errorCb(data);
+    config.beforeResponse(data, function (data) {
+        var isSuccess = config.dataReturnSuccessCondition(data);
+        isSuccess ? opts.successCb(data) : opts.errorCb(data);
+    }, opts.errorCb);
 }
 
 function sendReq(opts) {

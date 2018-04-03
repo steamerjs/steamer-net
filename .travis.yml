@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+node_js:
+  - node
+script: npm run travis
+
+before_install:
+  - export NODE_PATH=$(npm root -g)
+
+after_success:
+  - cat ./test/unit/coverage/lcov.info | node_modules/.bin/coveralls --verbose
+  - cat ./test/unit/coverage/coverage.json | node_modules/codecov.io/bin/codecov.io.js
+  - rm -rf ./test/unit/coverage

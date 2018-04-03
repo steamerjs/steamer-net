@@ -1,5 +1,7 @@
 const path = require('path');
 
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+
 let webpackTestConf = require('../../tools/webpack.base.js');
 
 // karma 目前只认 umd，commonjs/commonjs2会报错
@@ -80,7 +82,7 @@ module.exports = function(config) {
         autoWatch: true,
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['ChromeHeadless'],
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: false,

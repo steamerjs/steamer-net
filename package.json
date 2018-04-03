@@ -50,6 +50,8 @@
     "cache-loader": "^1.1.0",
     "chai": "^4.1.2",
     "clean-webpack-plugin": "^0.1.17",
+    "codecov.io": "^0.1.6",
+    "coveralls": "^3.0.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
     "eslint": "^4.4.1",

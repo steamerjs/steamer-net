@@ -19,7 +19,7 @@ module.exports = function(config) {
 
     ];
 
-    if (!isProduction) {
+    if (process.env.BABEL_ENV === 'test') {
         // 为了统计代码覆盖率，对 js 文件加入 istanbul-instrumenter-loader
         rules.push({
             test: /\.(js)$/,

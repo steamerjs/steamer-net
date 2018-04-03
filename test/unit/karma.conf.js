@@ -1,6 +1,12 @@
 const path = require('path');
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
+let browsers = ['ChromeHeadless'];
+// trvis env
+
+if (process.env.TRAVIS) {
+  browsers = ['Chrome_travis_ci'];
+}
 
 let webpackTestConf = require('../../tools/webpack.base.js');
 
@@ -82,7 +88,14 @@ module.exports = function(config) {
         autoWatch: true,
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['ChromeHeadless'],
+        browsers: browsers,
+
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
         singleRun: false,

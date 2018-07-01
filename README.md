@@ -17,6 +17,8 @@ ajax util for development
 * error
 	- [Function] error callback
     - errCode: `-1` => `xhr.onerror`, `-2` => `xhr.ontimeout`
+* timeout
+    - [Integer] timeout (unit: ms)
 * ajaxType
 	- [String] ajax type
     - default `GET`

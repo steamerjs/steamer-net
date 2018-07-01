@@ -143,14 +143,4 @@ net.ajaxPost({
 ### Test
 ```
 npm run test
-```
-
-### Changelog
-* v0.2.4 basic ajax features
-* v0.2.5 remove xhr.onload
-* v0.2.6 fix ajax get bug
-* v1.0.0 add tests
-* v1.1.1 fix xhr bug if you pass data to `localData`
-* v1.1.2 compatible with `global`
-* v1.1.4 add `headers`, `xhrFields` fields and support `FORM` type
-* v1.1.5 add `beforeRequest` and `beforeResponse` hooks
+````

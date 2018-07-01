@@ -1,21 +1,23 @@
-"use strict";
+import net from '../src/main';
 
 // http://harttle.land/2016/08/15/sinon-xhr.html
 // https://rjzaworski.com/2015/05/testing-api-requests-with-xhr-and-sinon-js
 // http://sinonjs.org/releases/v4.4.2/fake-xhr-and-server/
 
-import net from '../../../src/index.js';
+describe('xhr', function() {
+    let xhr;
+    let fake;
 
-describe('xhr', function(){
-    var xhr, fake;
-    before(function(){
+    before(function() {
         fake = sinon.useFakeXMLHttpRequest();
-        fake.onCreate = function(_xhr){ xhr = _xhr; };
+        fake.onCreate = function(_xhr) {
+            xhr = _xhr;
+        };
     });
 
     it('GET - json', function(done) {
         net.ajaxGet({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -48,7 +50,7 @@ describe('xhr', function(){
 
     it('GET - string', function(done) {
         net.ajaxGet({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -71,7 +73,7 @@ describe('xhr', function(){
 
     it('GET - ajax', function(done) {
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -99,7 +101,7 @@ describe('xhr', function(){
 
     it('POST - json', function(done) {
         net.ajaxPost({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -129,7 +131,7 @@ describe('xhr', function(){
 
     it('POST - text', function(done) {
         net.ajaxPost({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -152,7 +154,7 @@ describe('xhr', function(){
 
     it('POST - ajax', function(done) {
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -190,7 +192,7 @@ describe('xhr', function(){
 
     it('POST - localData', function(done) {
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -235,10 +237,10 @@ describe('xhr', function(){
             dataReturnSuccessCondition: function(data) {
                 return data.retcode === 0;
             }
-        })
+        });
 
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -281,11 +283,11 @@ describe('xhr', function(){
 
     it('FORM', function(done) {
         let formData = new FormData();
-        formData.append("a", 1);
-        formData.append("b", 2);
+        formData.append('a', 1);
+        formData.append('b', 2);
         // console.log(formData.getAll('a'));
         net.ajaxForm({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: formData,
             success: function(data) {
                 expect(data).to.be.eql({
@@ -314,11 +316,11 @@ describe('xhr', function(){
 
     it('FORM - ajax', function(done) {
         let formData = new FormData();
-        formData.append("a", 1);
-        formData.append("b", 2);
+        formData.append('a', 1);
+        formData.append('b', 2);
         // console.log(formData.getAll('a'));
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: formData,
             ajaxType: 'FORM',
             success: function(data) {
@@ -381,10 +383,10 @@ describe('xhr', function(){
             dataReturnSuccessCondition: function(data) {
                 return data.retcode === 0;
             }
-        })
+        });
 
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             ajaxType: 'GET',
             param: {
                 id: 1
@@ -414,14 +416,14 @@ describe('xhr', function(){
 
     it('GET - beforeRequest&beforeResponse', function(done) {
         net.ajaxInit({
-            beforeRequest: function(opts)　{
+            beforeRequest: function(opts) {
                 opts.param.flag = 'test';
                 return opts;
             },
             beforeResponse: function(data, successCb, errorCb) {
                 data.retcode = 1;
                 data.data.test = 'beforeRequest&beforeResponse';
-                if(data.retcode === 0) {
+                if (data.retcode === 0) {
                     successCb(data);
                 } else {
                     errorCb(data);
@@ -430,11 +432,11 @@ describe('xhr', function(){
             dataReturnSuccessCondition: function() {
                 return true;
             },
-        })
+        });
 
 
         net.ajax({
-            url: "./response/1.json",
+            url: './response/1.json',
             param: {
                 id: 1
             },
@@ -468,7 +470,8 @@ describe('xhr', function(){
         }));
     });
 
-    after(function(){
+    after(function() {
         fake.restore();
     });
 });
+

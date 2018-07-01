@@ -1,21 +1,18 @@
-"use strict";
+'use strict';
 
-exports.__esModule = true;
-exports.ajaxInit = ajaxInit;
-exports.ajaxGet = ajaxGet;
-exports.ajaxPost = ajaxPost;
-exports.ajaxJsonp = ajaxJsonp;
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * steamer-net
  * github: https://github.com/SteamerTeam/steamer-net
  * npm: https://www.npmjs.com/package/steamer-net
  */
 
-var global = typeof global !== "undefined" ? global : {};
+var global = typeof global !== 'undefined' ? global : {};
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
     global = window;
-} else if (typeof self !== "undefined") {
+} else if (typeof self !== 'undefined') {
     global = self;
 }
 
@@ -41,11 +38,17 @@ var STATE_200 = 200;
 // empty function
 function emptyFunc() {}
 
-function makeOpts(options) {
+function makeOpts(optParam) {
 
-    options = config.beforeRequest(options);
+    var options = config.beforeRequest(optParam);
     var opts = {};
-    opts.url = options.url, opts.paramObj = options.param || {}, opts.successCb = options.success || emptyFunc, opts.errorCb = options.error || emptyFunc, opts.localData = options.localData || null, opts.xhrFields = options.xhrFields || {}, opts.headers = options.headers || {};
+    opts.url = options.url;
+    opts.paramObj = options.param || {};
+    opts.successCb = options.success || emptyFunc;
+    opts.errorCb = options.error || emptyFunc;
+    opts.localData = options.localData || null;
+    opts.xhrFields = options.xhrFields || {};
+    opts.headers = options.headers || {};
     opts.method = options.ajaxType || 'GET';
     opts.dataType = options.dataType || 'json';
     opts.async = options.async;
@@ -67,11 +70,11 @@ function createXHR() {
     }, function () {
         return new XDomainRequest();
     }, function () {
-        return new ActiveXObject("Msxml2.XMLHTTP");
+        return new ActiveXObject('Msxml2.XMLHTTP');
     }, function () {
-        return new ActiveXObject("Msxml3.xmlhttp");
+        return new ActiveXObject('Msxml3.xmlhttp');
     }, function () {
-        return new ActiveXObject("Microsoft.XMLHTTP");
+        return new ActiveXObject('Microsoft.XMLHTTP');
     }];
 
     for (var i = 0, len = XMLHttpFactories.length; i < len; i++) {
@@ -95,7 +98,9 @@ function makeParam(paramObj) {
     var paramArray = [];
 
     for (var key in paramObj) {
-        paramArray.push(key + '=' + encodeURIComponent(paramObj[key]));
+        if (paramObj.hasOwnProperty(key)) {
+            paramArray.push(key + '=' + encodeURIComponent(paramObj[key]));
+        }
     }
 
     return paramArray.join('&');
@@ -103,19 +108,20 @@ function makeParam(paramObj) {
 
 /**
  * make url with param
- * @param  {String} url        [original url]
+ * @param  {String} urlParam        [original url]
  * @param  {Array}  paramArray [param array]
  * @return {String}            [final url]
  */
-function makeUrl(url, paramString) {
-    url += (!!~url.indexOf('?') ? '&' : '?') + paramString;
+function makeUrl(urlParam, paramString) {
+    var url = urlParam;
+    url += (urlParam.indexOf('?') > 0 ? '&' : '?') + paramString;
     return url;
 }
 
 /**
  * set request headers
- * @param {Object} xhr 
- * @param {Object} headers 
+ * @param {Object} xhr
+ * @param {Object} headers
  */
 function makeHeaders(xhr, headers, method) {
 
@@ -127,10 +133,10 @@ function makeHeaders(xhr, headers, method) {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     }
 
-    var headers = headers || {};
-    for (var key in headers) {
-        if (headers.hasOwnProperty(key)) {
-            xhr.setRequestHeader(key, headers[key]);
+    var hdrs = headers || {};
+    for (var key in hdrs) {
+        if (hdrs.hasOwnProperty(key)) {
+            xhr.setRequestHeader(key, hdrs[key]);
         }
     }
 }
@@ -150,9 +156,9 @@ function ajaxInit(cf) {
 }
 
 function ajaxGet(options) {
-    var opts = makeOpts(options),
-        paramString = makeParam(opts.paramObj),
-        url = makeUrl(opts.url, paramString);
+    var opts = makeOpts(options);
+    var paramString = makeParam(opts.paramObj);
+    var url = makeUrl(opts.url, paramString);
 
     var xhr = sendReq(opts);
 
@@ -161,16 +167,16 @@ function ajaxGet(options) {
     }
 
     xhr.open('GET', url, true);
+    setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间
     makeXhrFields(xhr, opts.xhrFields);
-    // xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     makeHeaders(xhr, opts.headers, 'GET');
     xhr.send();
 }
 
 function ajaxPost(options) {
-    var opts = makeOpts(options),
-        paramString = makeParam(opts.paramObj),
-        url = opts.url;
+    var opts = makeOpts(options);
+    var paramString = makeParam(opts.paramObj);
+    var url = opts.url;
 
     var xhr = sendReq(opts);
 
@@ -179,15 +185,15 @@ function ajaxPost(options) {
     }
 
     xhr.open('POST', url, true);
+    setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间
     makeXhrFields(xhr, opts.xhrFields);
-    // xhr.setRequestHeader && xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     makeHeaders(xhr, opts.headers, 'POST');
     xhr.send(paramString);
 }
 
 function ajaxForm(options) {
-    var opts = makeOpts(options),
-        url = opts.url;
+    var opts = makeOpts(options);
+    var url = opts.url;
 
     var xhr = sendReq(opts);
 
@@ -196,6 +202,7 @@ function ajaxForm(options) {
     }
 
     xhr.open('POST', url, true);
+    setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间
     makeXhrFields(xhr, opts.xhrFields);
     makeHeaders(xhr, opts.headers, 'FORM');
     xhr.send(opts.paramObj);
@@ -211,11 +218,11 @@ function ajaxJsonp(options) {
     var opts = makeOpts(options);
 
     if (!opts.paramObj) {
-        throw new Error("Please provide parameter for jsonp");
+        throw new Error('Please provide parameter for jsonp');
     }
 
     if (!opts.paramObj.jsonCbName) {
-        opts.paramObj.jsonCbName = "jsonCb_" + Date.now();
+        opts.paramObj.jsonCbName = 'jsonCb_' + Date.now();
     }
 
     opts.paramObj.callback = opts.paramObj.jsonCbName;
@@ -234,14 +241,13 @@ function ajaxJsonp(options) {
     function removeScript(st) {
         setTimeout(function () {
             st.parentNode.removeChild(st);
-            st = null;
         }, 200);
     }
 
-    var paramString = makeParam(opts.paramObj),
-        url = makeUrl(opts.url, paramString),
-        script = global && global.document ? global.document.createElement("script") : {},
-        head = global && global.document ? global.document.getElementsByTagName("head")[0] : {};
+    var paramString = makeParam(opts.paramObj);
+    var url = makeUrl(opts.url, paramString);
+    var script = global && global.document ? global.document.createElement('script') : {};
+    var head = global && global.document ? global.document.getElementsByTagName('head')[0] : {};
 
     script.src = url;
     head.appendChild(script);
@@ -270,11 +276,6 @@ function sendReq(opts) {
     if (opts.localData) {
         onDataReturn(opts.localData, opts);
         return;
-    }
-
-    // 设置timeout
-    if (opts.timeout) {
-        xhr.timeout = opts.timeout;
     }
 
     // 是否async
@@ -311,6 +312,13 @@ function sendReq(opts) {
     return xhr;
 }
 
+function setXhrTimeout(xhr, opts) {
+    // 设置timeout
+    if (opts.timeout) {
+        xhr.timeout = opts.timeout;
+    }
+}
+
 function ajax(options) {
 
     var opts = makeOpts(options);
@@ -340,4 +348,8 @@ var net = {
     ajaxInit: ajaxInit
 };
 
+exports.ajaxInit = ajaxInit;
+exports.ajaxGet = ajaxGet;
+exports.ajaxPost = ajaxPost;
+exports.ajaxJsonp = ajaxJsonp;
 exports.default = net;

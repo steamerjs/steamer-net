@@ -111,11 +111,12 @@ function makeParam(paramObj) {
  * @return {String}          [return param json string]
  */
 function stringifyParam(paramObj) {
-    var obj = {};
-
-    for (var key in paramObj) {
-        var value = paramObj[key];
-        obj[key] = typeof value === 'string' ? encodeURIComponent(value) : value;
+    const obj = {};
+    for (let key in paramObj) {
+        if (paramObj) {
+            const value = paramObj[key];
+            obj[key] = typeof value === 'string' ? encodeURIComponent(value) : value;
+        }
     }
 
     return JSON.stringify(obj);
@@ -189,24 +190,20 @@ export function ajaxGet(options) {
 }
 
 function ajaxPost(options) {
-    var opts = makeOpts(options),
-        url = opts.url,
-        paramString = '';
-
-    var xhr = sendReq(opts);
+    let opts = makeOpts(options);
+    let paramString = '';
+    const url = opts.url;
+    const xhr = sendReq(opts);
 
     if (!xhr) {
         return;
     }
-    
     xhr.open('POST', url, true);
 
     // json格式
     if (options.type && options.type === 'json') {
         paramString = stringifyParam(opts.paramObj);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        console.log('paramObj: ', opts.paramObj)
-        console.log('paramString: ', paramString)
     }
     else {
         paramString = makeParam(opts.paramObj);
@@ -214,7 +211,6 @@ function ajaxPost(options) {
         makeXhrFields(xhr, opts.xhrFields);
         makeHeaders(xhr, opts.headers, 'POST');
     }
-    
     xhr.send(paramString);
 }
 

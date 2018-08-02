@@ -369,4 +369,4 @@ var net = {
 };
 
 export default net;
-export { ajaxInit, ajaxGet, ajaxJsonp };
+export { ajaxInit, ajaxGet, ajaxPost, ajaxForm, ajaxJsonp };

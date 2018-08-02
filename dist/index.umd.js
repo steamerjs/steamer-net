@@ -376,6 +376,8 @@
 
     exports.ajaxInit = ajaxInit;
     exports.ajaxGet = ajaxGet;
+    exports.ajaxPost = ajaxPost;
+    exports.ajaxForm = ajaxForm;
     exports.ajaxJsonp = ajaxJsonp;
     exports.default = net;
 

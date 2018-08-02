@@ -189,7 +189,7 @@ export function ajaxGet(options) {
     xhr.send();
 }
 
-function ajaxPost(options) {
+export function ajaxPost(options) {
     let opts = makeOpts(options);
     let paramString = '';
     const url = opts.url;
@@ -215,7 +215,7 @@ function ajaxPost(options) {
     xhr.send(paramString);
 }
 
-function ajaxForm(options) {
+export function ajaxForm(options) {
     let opts = makeOpts(options);
     let url = opts.url;
 

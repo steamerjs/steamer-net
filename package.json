@@ -20,9 +20,9 @@
         "url": "git+https://github.com/steamerjs/steamer-net.git"
     },
     "keywords": [
-      "steamer",
-      "ajax",
-      "util"
+        "steamer",
+        "ajax",
+        "util"
     ],
     "author": "steamerjs",
     "license": "MIT",

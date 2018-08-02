@@ -113,7 +113,7 @@ function makeParam(paramObj) {
 function stringifyParam(paramObj) {
     const obj = {};
     for (let key in paramObj) {
-        if (paramObj) {
+        if (paramObj.hasOwnProperty(key)) {
             const value = paramObj[key];
             obj[key] = typeof value === 'string' ? encodeURIComponent(value) : value;
         }
@@ -145,7 +145,7 @@ function makeHeaders(xhr, headers, method) {
         return;
     }
 
-    if ((method === 'GET' || method === 'POST')) {
+    if (!headers['Content-type'] && (method === 'GET' || method === 'POST')) {
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     }
 
@@ -198,19 +198,20 @@ function ajaxPost(options) {
     if (!xhr) {
         return;
     }
+
     xhr.open('POST', url, true);
 
     // json格式
     if (options.type && options.type === 'json') {
         paramString = stringifyParam(opts.paramObj);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        opts.headers['Content-type'] = 'application/json';
     }
     else {
         paramString = makeParam(opts.paramObj);
-        setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间
-        makeXhrFields(xhr, opts.xhrFields);
-        makeHeaders(xhr, opts.headers, 'POST');
     }
+    setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间
+    makeXhrFields(xhr, opts.xhrFields);
+    makeHeaders(xhr, opts.headers, 'POST');
     xhr.send(paramString);
 }
 

@@ -9,6 +9,10 @@ ajax util for development
 ## Options
 * url
 	- [String] request url
+* type
+    - [String] param type. Pass json POST data to Ajax when set type as `json`
+    - default `''`
+    - `json` | `''` 
 * param
 	- [Object]
 	- jsonCbName [String] necessary if ajaxType is `JSONP`

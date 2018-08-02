@@ -190,6 +190,45 @@ describe('xhr', function() {
         }));
     });
 
+    it('POST - ajaxJson', function(done) {
+        net.ajax({
+            url: './response/1.json',
+            param: {
+                id: 1
+            },
+            ajaxType: 'POST',
+            type: 'json',
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            success: function(data) {
+                expect(data).to.be.eql({
+                    a: 1,
+                    b: {},
+                    c: true
+                });
+                done();
+            },
+            error: function(xhr) {
+                done();
+            }
+        });
+
+        expect(xhr.requestHeaders).to.be.eql({
+            'Content-type': 'application/json;charset=utf-8',
+            'Access-Control-Allow-Origin': '*'
+        });
+        expect(xhr.url).to.be.eql('./response/1.json');
+        expect(xhr.requestBody).to.be.eql('{"id":1}');
+        expect(xhr.method).to.be.eql('POST');
+
+        xhr.respond(200, { 'Content-Type': 'application/x-www-form-urlencoded' }, JSON.stringify({
+            a: 1,
+            b: {},
+            c: true
+        }));
+    })
+
     it('POST - localData', function(done) {
         net.ajax({
             url: './response/1.json',

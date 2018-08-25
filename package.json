@@ -1,8 +1,8 @@
 {
     "name": "steamer-net",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "ajax util",
-    "main": "dist/index.cjs.js",
+    "main": "dist/index.js",
     "module": "dist/index.esm.js",
     "browser": "dist/index.umd.js",
     "scripts": {

@@ -1,4 +1,7 @@
 * 1.2.0
+    - change index.cjs.js to index.js
+
+* 1.2.0
     - use rollup to bundle the library
 
 * 1.1.5

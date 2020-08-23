@@ -212,7 +212,6 @@ export function ajaxPost(options) {
         } else {
             paramString = opts.paramObj
         }
-        
     } else {
         paramString = makeParam(opts.paramObj);
     }

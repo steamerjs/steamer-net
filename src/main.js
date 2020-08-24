@@ -205,8 +205,14 @@ export function ajaxPost(options) {
     if (options.type && options.type === 'json') {
         paramString = stringifyParam(opts.paramObj);
         opts.headers['Content-type'] = 'application/json';
-    }
-    else {
+    } else if (options.type && options.type === 'raw') {
+        opts.headers['Content-type'] = 'application/json';
+        if(Object.prototype.toString.call(opts.paramObj) === '[object object]') {
+            paramString = JSON.stringify(opts.paramObj)
+        } else {
+            paramString = opts.paramObj
+        }
+    } else {
         paramString = makeParam(opts.paramObj);
     }
     setXhrTimeout(xhr, opts); // IE11一定要在xhr.open之后设置timeout时间

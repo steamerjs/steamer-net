@@ -3,6 +3,7 @@
  * github: https://github.com/SteamerTeam/steamer-net
  * npm: https://www.npmjs.com/package/steamer-net
  */
+import reporter from './reporter';
 
 let global = (typeof global !== 'undefined') ? global : {};
 
@@ -207,10 +208,10 @@ export function ajaxPost(options) {
         opts.headers['Content-type'] = 'application/json';
     } else if (options.type && options.type === 'raw') {
         opts.headers['Content-type'] = 'application/json';
-        if(Object.prototype.toString.call(opts.paramObj) === '[object object]') {
-            paramString = JSON.stringify(opts.paramObj)
+        if (Object.prototype.toString.call(opts.paramObj) === '[object object]') {
+            paramString = JSON.stringify(opts.paramObj);
         } else {
-            paramString = opts.paramObj
+            paramString = opts.paramObj;
         }
     } else {
         paramString = makeParam(opts.paramObj);
@@ -316,7 +317,16 @@ function sendReq(opts) {
             if (xhr.status === STATE_200) {
                 let data = xhr.responseText;
                 if (opts.dataType === 'json') {
-                    data = JSON.parse(xhr.responseText);
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        // 上报
+                        if (reporter.reporter) {
+                            reporter.report();
+                        } else {
+                            throw e;
+                        }
+                    }
                 }
                 onDataReturn(data, opts);
             }
@@ -378,6 +388,7 @@ let net = {
     ajaxForm,
     ajaxJsonp,
     ajaxInit,
+    reporter
 };
 
 export default net;

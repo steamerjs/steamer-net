@@ -1,3 +1,24 @@
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Reporter = function () {
+    function Reporter() {
+        _classCallCheck(this, Reporter);
+    }
+
+    Reporter.prototype.injectReporter = function injectReporter(reporter, cb) {
+        this.reporter = reporter;
+        this.cb = cb;
+    };
+
+    Reporter.prototype.report = function report() {
+        this.cb(this.reporter);
+    };
+
+    return Reporter;
+}();
+
+var reporter = new Reporter();
+
 /**
  * steamer-net
  * github: https://github.com/SteamerTeam/steamer-net
@@ -202,6 +223,13 @@ function ajaxPost(options) {
     if (options.type && options.type === 'json') {
         paramString = stringifyParam(opts.paramObj);
         opts.headers['Content-type'] = 'application/json';
+    } else if (options.type && options.type === 'raw') {
+        opts.headers['Content-type'] = 'application/json';
+        if (Object.prototype.toString.call(opts.paramObj) === '[object object]') {
+            paramString = JSON.stringify(opts.paramObj);
+        } else {
+            paramString = opts.paramObj;
+        }
     } else {
         paramString = makeParam(opts.paramObj);
     }
@@ -306,7 +334,16 @@ function sendReq(opts) {
             if (xhr.status === STATE_200) {
                 var data = xhr.responseText;
                 if (opts.dataType === 'json') {
-                    data = JSON.parse(xhr.responseText);
+                    try {
+                        data = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        // 上报
+                        if (reporter.reporter) {
+                            reporter.report();
+                        } else {
+                            throw e;
+                        }
+                    }
                 }
                 onDataReturn(data, opts);
             } else {
@@ -365,7 +402,8 @@ var net = {
     ajaxPost: ajaxPost,
     ajaxForm: ajaxForm,
     ajaxJsonp: ajaxJsonp,
-    ajaxInit: ajaxInit
+    ajaxInit: ajaxInit,
+    reporter: reporter
 };
 
 export default net;
